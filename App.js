@@ -1,92 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Pressable,
-  Image
-} from 'react-native';
-import Loading from './src/components/Loading';
+import React from 'react'
+import LoginPage from './src/screens/LoginPage'
+import SignUpPage from './src/screens/SignUpPage'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-export default function App() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [result, setResult] = useState("");
+const Stack = createNativeStackNavigator();
 
+const App = () => {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Image
-        style={styles.image}
-        source={require("./assets/images/login.png")} />
-      <Text
-        style={styles.welcome}
-      >Welcome {result} </Text>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-      <Text>Email</Text>
-      <TextInput
-        inputMode='email'
-        style={styles.textInput}
-        onChangeText={setEmail}
-        value={email}
-        placeholder='Enter your email'
-      />
+        <Stack.Screen component={LoginPage} name='Login' />
+        <Stack.Screen component={SignUpPage} name='SignUp' />
 
-      <Text>Password</Text>
-      <TextInput
-        secureTextEntry={true}
-        style={styles.textInput}
-        onChangeText={setPassword}
-        value={password}
-        placeholder='Enter your password'
-      />
-
-      <Pressable
-        onPress={() => setResult(`${name} ${email} `)}
-        style={({ pressed }) => [{
-          backgroundColor: pressed ? "blue" : "gray"
-        }, styles.button]}>
-        <Text style={styles.buttonText}>Save</Text>
-      </Pressable>
-    </View>
-  );
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    marginVertical: 10,
-    height: 40,
-    width: "80%",
-    textAlign: "center"
-  },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    height: 40,
-    width: "80%",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "600",
-  },
-  image: {
-    height: 100,
-    width: 100,
-    resizeMode: 'contain'
-  },
-  welcome: {
-    fontWeight: "bold",
-    fontSize: 25
-  }
-});
+export default App
+
