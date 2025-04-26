@@ -14,6 +14,7 @@ export default SignUpPage
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"#102E50",
         justifyContent: "center",
         alignItems: "center"
     }
