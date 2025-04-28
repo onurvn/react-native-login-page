@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { Loading, CustomTextInput, CustomButton } from '../components';
+import { useSelector, useDispatch } from 'react-redux';
+import { setEmail, setPassword, setIsLoading } from '../redux/userSlice';
 
 const LoginPage = ({ navigation }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const { email, password, isLoading } = useSelector((state) => state.user);
+
+    const dispatch = useDispatch();
 
     return (
         <View style={styles.container}>
@@ -16,13 +18,14 @@ const LoginPage = ({ navigation }) => {
 
             <Image
                 style={styles.image}
-                source={require("../../assets/images/login.png")} />
+                source={require("../../assets/images/login.png")}
+            />
 
 
             <CustomTextInput
                 title="Email"
                 isSecureText={false}
-                onChangeText={setEmail}
+                onChangeText={(text) => dispatch(setEmail(text))}
                 value={email}
                 placeholder="Enter your email"
             />
@@ -30,7 +33,7 @@ const LoginPage = ({ navigation }) => {
             <CustomTextInput
                 title="Password"
                 isSecureText={true}
-                onChangeText={setPassword}
+                onChangeText={(password) => dispatch(setPassword(password))}
                 value={password}
                 placeholder="Enter your password"
             />
@@ -38,7 +41,7 @@ const LoginPage = ({ navigation }) => {
             <CustomButton
                 title="Login"
                 width="80%"
-                onPress={() => setIsLoading(true)}
+                onPress={() => dispatch(setIsLoading(true))}
                 buttonColor="blue"
                 pressedButtonColor="gray"
             />
@@ -51,7 +54,7 @@ const LoginPage = ({ navigation }) => {
                 pressedButtonColor="gray"
             />
 
-            {isLoading ? <Loading isLoading={() => setIsLoading(false)} /> : null}
+            {isLoading ? <Loading isLoading={() => dispatch(setIsLoading(false))} /> : null}
         </View >
     );
 }
