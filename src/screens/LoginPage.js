@@ -1,12 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Loading, CustomTextInput, CustomButton } from '../components';
 import { useSelector, useDispatch } from 'react-redux';
 import { setEmail, setPassword, setIsLoading } from '../redux/userSlice';
+import { login } from '../redux/userSlice';
 
 const LoginPage = ({ navigation }) => {
-    const { email, password, isLoading } = useSelector((state) => state.user);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const { isLoading } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
 
@@ -25,7 +29,7 @@ const LoginPage = ({ navigation }) => {
             <CustomTextInput
                 title="Email"
                 isSecureText={false}
-                onChangeText={(text) => dispatch(setEmail(text))}
+                onChangeText={(text) => setEmail(text.toLowerCase())}
                 value={email}
                 placeholder="Enter your email"
             />
@@ -33,7 +37,7 @@ const LoginPage = ({ navigation }) => {
             <CustomTextInput
                 title="Password"
                 isSecureText={true}
-                onChangeText={(password) => dispatch(setPassword(password))}
+                onChangeText={(password) => setPassword(password)}
                 value={password}
                 placeholder="Enter your password"
             />
@@ -41,7 +45,7 @@ const LoginPage = ({ navigation }) => {
             <CustomButton
                 title="Login"
                 width="80%"
-                onPress={() => dispatch(setIsLoading(true))}
+                onPress={() => dispatch(login({ email, password }))}
                 buttonColor="blue"
                 pressedButtonColor="gray"
             />
