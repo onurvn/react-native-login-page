@@ -26,6 +26,10 @@ const initialState = {
     password: null,
     isLoading: false,
     isAuth: false,
+    users: {
+        userEmail: "test@test.com",
+        userPassword: "123456"
+    },
     token: null,
     user: null,
     error: null
@@ -44,6 +48,16 @@ export const userSlice = createSlice({
         },
         setIsLoading: (state, action) => {
             state.isLoading = action.payload
+        },
+        setLogin: (state) => {
+            if ((state.email === state.users.userEmail) &&
+                (state.password === state.users.userPassword)) {
+                console.log(true)
+                state.isAuth = true
+            } else {
+                console.log("wrong")
+                console.log(false)
+            }
         }
     },
     extraReducers: (builder) => {
