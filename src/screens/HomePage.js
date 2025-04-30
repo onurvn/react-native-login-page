@@ -3,11 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { addDoc, collection, getDocs, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import CustomButton from '../components/CustomButton';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/userSlice';
 
 const HomePage = () => {
   const [data, setData] = useState([]);
   const [isSaved, setIsSaved] = useState(false);
   const [updateTheData, setUpdateTheData] = useState("");
+
+  const dispatch = useDispatch();
 
   console.log("data", data)
 
@@ -70,6 +74,10 @@ const HomePage = () => {
     }
   }
 
+  const handleLogout = () => {
+    dispatch(logout());
+  }
+
   return (
     <View style={styles.container}>
 
@@ -112,6 +120,7 @@ const HomePage = () => {
         style={{ borderWidth: 1, width: "50%", marginVertical: 15, padding: 20 }}
       />
 
+
       <ScrollView>
         <View style={styles.dataContainer}>
           {
@@ -131,6 +140,17 @@ const HomePage = () => {
           }
         </View>
       </ScrollView >
+
+      <View style={styles.logoutButton}>
+        <CustomButton
+          title="Logout"
+          width="20%"
+          onPress={handleLogout}
+          buttonColor="blue"
+          pressedButtonColor="gray"
+        />
+      </View>
+
     </View>
   )
 }
@@ -149,6 +169,12 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 20,
     padding: 20,
+  },
+  logoutButton: {
+    marginBottom: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   }
 
 })
