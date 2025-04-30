@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const login = createAsyncThunk("user/login", async ({ email, password }) => {
@@ -46,6 +46,25 @@ export const logout = createAsyncThunk("user/logout", async () => {
         await signOut(auth);
 
         await AsyncStorage.removeItem("userToken");
+
+    } catch (error) {
+        throw error;
+    }
+})
+
+export const register = createAsyncThunk("user/register", async ({ email, password }) => {
+    try {
+        const auth = getAuth();
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        const user = userCredential.user;
+        const token = user.stsTokenManager.accessToken;
+
+        await sendEmailVerification(user);
+
+        await AsyncStorage.setItem("userToken", token);
+
+        return token;
 
     } catch (error) {
         throw error;
@@ -134,6 +153,20 @@ export const userSlice = createSlice({
             .addCase(logout.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error.action.payload
+            })
+            .addCase(register.pending, (state) => {
+                state.isLoading = true;
+                state.isAuth = false;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isAuth = true;
+                state.token = action.payload;
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isAuth = false;
+                state.error = "Invalid email or password";
             })
     }
 })
